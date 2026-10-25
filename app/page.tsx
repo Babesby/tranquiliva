@@ -1477,38 +1477,6 @@ function Today({
           View history <ChevronRight />
         </button>
       </section>
-      <section className="quick-actions five">
-        <button onClick={() => setView("talk")}>
-          <span className="qa-icon aqua">
-            <MessageCircle />
-          </span>
-          <strong>Tranquiliva AI</strong>
-        </button>
-        <button onClick={() => setView("journal")}>
-          <span className="qa-icon violet">
-            <PenLine />
-          </span>
-          <strong>Journal</strong>
-        </button>
-        <button onClick={() => setView("resources")}>
-          <span className="qa-icon green">
-            <Leaf />
-          </span>
-          <strong>Resources</strong>
-        </button>
-        <button onClick={() => setView("brain")}>
-          <span className="qa-icon brain">
-            <Brain />
-          </span>
-          <strong>Know your brain</strong>
-        </button>
-        <button onClick={() => setView("causecanvas")}>
-          <span className="qa-icon climate">
-            <Earth />
-          </span>
-          <strong>CauseCanvas</strong>
-        </button>
-      </section>
     </>
   );
 }
