@@ -278,6 +278,51 @@ export default function Tranquiliva() {
   );
 }
 
+const landingFeatures = [
+  {
+    id: "talk",
+    label: "Talk",
+    icon: "/action-icons/talk.webp",
+    description: "A private space to talk through what is on your mind.",
+    destination: "talk",
+  },
+  {
+    id: "reflect",
+    label: "Reflect",
+    icon: "/action-icons/reflect.webp",
+    description: "Write privately and notice patterns in your reflections.",
+    destination: "journal",
+  },
+  {
+    id: "practise",
+    label: "Practise",
+    icon: "/action-icons/practise.webp",
+    description: "Try gentle grounding exercises and practical wellbeing tools.",
+    destination: "resources",
+  },
+  {
+    id: "connect",
+    label: "Connect",
+    icon: "/action-icons/connect.webp",
+    description: "Explore supportive, moderated community spaces.",
+    destination: "community",
+  },
+  {
+    id: "care",
+    label: "Care",
+    icon: "/action-icons/care.webp",
+    description: "Find out about private care from verified therapists.",
+    destination: "therapists",
+  },
+  {
+    id: "learn",
+    label: "Learn",
+    icon: "/action-icons/learn.webp",
+    description: "Discover how your mind works in Know Your Brain.",
+    destination: "brain",
+  },
+] as const;
+
 function PublicHome({
   go,
   dark,
@@ -289,18 +334,8 @@ function PublicHome({
 }) {
   const [assessmentOpen, setAssessmentOpen] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
-  useEffect(() => {
-    const today = new Date().toISOString().slice(0, 10);
-    const shownThisSession = window.sessionStorage.getItem("tranquiliva-assessment-shown");
-    const lastShown = window.localStorage.getItem("tranquiliva-assessment-last-shown");
-    if (shownThisSession || lastShown === today) return;
-    const timer = window.setTimeout(() => {
-      window.sessionStorage.setItem("tranquiliva-assessment-shown", "true");
-      window.localStorage.setItem("tranquiliva-assessment-last-shown", today);
-      setAssessmentOpen(true);
-    }, 1400);
-    return () => window.clearTimeout(timer);
-  }, []);
+  const [activeFeature, setActiveFeature] = useState<(typeof landingFeatures)[number]["id"] | null>(null);
+  const selectedFeature = landingFeatures.find((item) => item.id === activeFeature);
   return (
     <div className="public-page" id="top">
       <header className="public-nav">
@@ -353,14 +388,8 @@ function PublicHome({
           <div className="hero-copy">
             <h1>A calmer place for your mind to land.</h1>
             <div className="hero-actions">
-              <button className="solid-button large" onClick={() => go("auth")}>
-                Begin privately <ArrowRight />
-              </button>
-              <button
-                className="play-button"
-                onClick={() => setAssessmentOpen(true)}
-              >
-                Free assessment
+              <button type="button" className="assessment-hero-button" onClick={() => setAssessmentOpen(true)}>
+                Free assessment <ArrowRight aria-hidden="true" />
               </button>
             </div>
           </div>
@@ -372,13 +401,13 @@ function PublicHome({
             <div className="floating-checkin">
               <strong>What do you need?</strong>
               <div>
-                <button aria-label="A quiet minute">
+                <button type="button" aria-label="Explore Practise" onClick={() => setActiveFeature("practise")}>
                   <Leaf />
                 </button>
-                <button aria-label="Write privately">
+                <button type="button" aria-label="Explore Reflect" onClick={() => setActiveFeature("reflect")}>
                   <PenLine />
                 </button>
-                <button aria-label="Talk it through">
+                <button type="button" aria-label="Explore Talk" onClick={() => setActiveFeature("talk")}>
                   <MessageCircle />
                 </button>
               </div>
@@ -389,66 +418,26 @@ function PublicHome({
           </div>
         </section>
 
-        <section className="luxe-statement">
-          <h2>One calm place for what you need now.</h2>
+        <section className="luxe-statement action-click-cue" aria-label="Explore the six Tranquiliva features below">
+          <img src="/action-icons/click.webp" width={104} height={104} alt="" aria-hidden="true" />
+          <span>Tap an icon to explore</span>
         </section>
 
         <section className="icon-dock" aria-label="Explore Tranquiliva">
-          <button
-            className="dock-item talk"
-            onClick={() => go("auth")}
-            aria-label="Talk. Think out loud in private"
-          >
-            <span>
-              <MessageCircle />
-            </span>
-            <strong>Talk</strong>
-            <em>Think out loud in private.</em>
-          </button>
-          <button
-            className="dock-item reflect"
-            onClick={() => go("auth")}
-            aria-label="Reflect. Keep words, voice and patterns"
-          >
-            <span>
-              <PenLine />
-            </span>
-            <strong>Reflect</strong>
-            <em>Keep words, voice and patterns.</em>
-          </button>
-          <button
-            className="dock-item practise"
-            onClick={() => go("auth")}
-            aria-label="Practise. Use one small thing now"
-          >
-            <span>
-              <Leaf />
-            </span>
-            <strong>Practise</strong>
-            <em>Use one small thing now.</em>
-          </button>
-          <button
-            className="dock-item connect"
-            onClick={() => go("auth")}
-            aria-label="Connect. Join moderated anonymous rooms"
-          >
-            <span>
-              <Users />
-            </span>
-            <strong>Connect</strong>
-            <em>Join moderated anonymous rooms.</em>
-          </button>
-          <button
-            className="dock-item care"
-            onClick={() => go("auth")}
-            aria-label="Care. Request a verified therapist"
-          >
-            <span>
-              <Heart />
-            </span>
-            <strong>Care</strong>
-            <em>Request a verified therapist.</em>
-          </button>
+          {landingFeatures.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={`dock-item ${item.id}`}
+              aria-label={`Explore ${item.label}. ${item.description}`}
+              onClick={() => setActiveFeature(item.id)}
+            >
+              <span className="dock-art" aria-hidden="true">
+                <img src={item.icon} alt="" width={640} height={640} loading="lazy" decoding="async" />
+              </span>
+              <strong>{item.label}</strong>
+            </button>
+          ))}
         </section>
 
         <section className="care-showcase" id="care">
@@ -480,12 +469,30 @@ function PublicHome({
         <section className="final-cta">
           <Mark light />
           <h2>Take one quiet minute.</h2>
-          <button className="aqua-button" onClick={() => go("auth")}>
-            Begin privately <ArrowRight />
-          </button>
+
         </section>
       </main>
       <GlobalFooter go={go} />
+      <Dialog open={activeFeature !== null} onOpenChange={(open) => { if (!open) setActiveFeature(null); }}>
+        <DialogContent className="feature-preview-dialog">
+          <DialogHeader>
+            <DialogTitle>{selectedFeature?.label}</DialogTitle>
+            <DialogDescription>{selectedFeature?.description}</DialogDescription>
+          </DialogHeader>
+          <button
+            type="button"
+            className="solid-button feature-preview-action"
+            onClick={() => {
+              if (!selectedFeature) return;
+              window.sessionStorage.setItem("tranquiliva-footer-destination", selectedFeature.destination);
+              setActiveFeature(null);
+              go("auth");
+            }}
+          >
+            Explore {selectedFeature?.label} <ArrowRight aria-hidden="true" />
+          </button>
+        </DialogContent>
+      </Dialog>
       <Dialog open={assessmentOpen} onOpenChange={setAssessmentOpen}>
         <DialogContent className="assessment-popup">
           <DialogHeader>
@@ -1063,7 +1070,8 @@ function MemberApp({
     if (typeof window === "undefined") return "today";
     const requested = window.sessionStorage.getItem("tranquiliva-footer-destination");
     window.sessionStorage.removeItem("tranquiliva-footer-destination");
-    return requested === "journal" || requested === "resources" || requested === "therapists"
+    return requested === "journal" || requested === "resources" || requested === "therapists" ||
+      requested === "talk" || requested === "community" || requested === "brain"
       ? requested
       : "today";
   });
