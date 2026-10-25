@@ -8111,3 +8111,154 @@ body { font-size: 17px; }
     height: 19px;
   }
 }
+
+
+/* Tranquiliva official emoji and brand refresh, October 2026 */
+/* True source artwork provided by the brand. Clear text remains for accessibility. */
+.logo .brand-logo-icon {
+  flex: 0 0 auto;
+  display: block;
+  width: 43px;
+  height: 43px;
+  border-radius: 12px;
+  object-fit: contain;
+}
+.t-mark { display: inline-grid; place-items: center; }
+.t-mark img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.mobile-app-logo .t-mark { width: 30px; height: 30px; flex: 0 0 30px; }
+.footer-brand .logo .brand-logo-icon { width: 49px; height: 49px; border-radius: 14px; }
+.footer-brand > p { max-width: 280px; margin: -7px 0 0; color: #adc7ca; font-size: 14px; line-height: 1.5; }
+.footer-links button,
+.footer-allmorrow a {
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: left;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: #abc3c4;
+  cursor: pointer;
+}
+.footer-links button:hover,
+.footer-links a:hover,
+.footer-allmorrow a:hover { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
+.footer-links button:focus-visible { outline: 2px solid var(--aqua); outline-offset: 4px; }
+.footer-allmorrow a { margin-top: 1px; }
+.global-footer .footer-legal { align-items: center; }
+
+/* Open illustrated selectors. No boxed/tiled card-on-card layout. */
+.checkin-context-stage .context-groups { gap: clamp(26px, 3vw, 42px); }
+.checkin-context-stage .context-options {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px 6px;
+  align-items: start;
+  margin-top: 16px;
+}
+.member-shell .checkin-context-stage .context-choice {
+  min-width: 0;
+  min-height: 126px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  gap: 5px;
+  padding: 11px 4px 9px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: normal;
+  transition: background-color .16s ease, border-color .16s ease;
+}
+.member-shell .checkin-context-stage .context-choice .context-emoji {
+  flex: 0 0 auto;
+  width: min(74px, 100%);
+  height: 74px;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+}
+.member-shell .checkin-context-stage .context-choice .context-choice-label {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 0 2px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.member-shell .checkin-context-stage .context-choice .context-choice-mark {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 19px;
+  height: 19px;
+  flex: 0 0 19px;
+  border-color: transparent;
+  background: transparent;
+  opacity: 0;
+}
+.member-shell .checkin-context-stage .context-choice[aria-pressed="true"] {
+  border-color: color-mix(in srgb, var(--aqua) 62%, var(--line));
+  background: color-mix(in srgb, var(--aqua) 13%, var(--paper));
+  color: var(--ink);
+}
+.member-shell .checkin-context-stage .context-choice[aria-pressed="true"] .context-choice-mark {
+  border-color: var(--teal);
+  background: var(--teal);
+  opacity: 1;
+}
+.member-shell .checkin-context-stage .context-choice:hover {
+  background: color-mix(in srgb, var(--aqua) 8%, transparent);
+}
+.member-shell .checkin-context-stage .context-choice:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+:root[data-theme="dark"] .member-shell .checkin-context-stage .context-choice[aria-pressed="true"] {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--aqua) 15%, var(--paper));
+}
+@media (min-width: 1151px) {
+  .checkin-context-stage .context-group + .context-group { padding-left: clamp(22px, 2.5vw, 34px); }
+}
+@media (max-width: 760px) {
+  .public-nav .logo .brand-logo-icon { width: 36px; height: 36px; border-radius: 10px; }
+  .checkin-context-stage .context-options { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .member-shell .checkin-context-stage .context-choice { min-height: 119px; padding: 8px 3px; font-size: 13px; }
+  .member-shell .checkin-context-stage .context-choice .context-emoji { width: min(70px, 100%); height: 70px; }
+  .footer-links { width: 100%; max-width: 460px; grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 370px) {
+  .checkin-context-stage .context-options { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .member-shell .checkin-context-stage .context-choice { min-height: 115px; }
+}
+
+/* Quiet internal information routes; independent of the old HTML website. */
+.legal-shell { min-height: 100vh; padding: 26px clamp(18px, 4vw, 56px) 48px; background: var(--mist); color: var(--ink); }
+.legal-topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; max-width: 1150px; margin: 0 auto 40px; }
+.legal-topbar .logo .brand-logo-icon { width: 39px; height: 39px; }
+.legal-topbar > a { color: var(--teal); font-size: 14px; font-weight: 700; }
+.legal-content { max-width: 850px; margin: auto; border: 1px solid var(--line); border-radius: 22px; padding: clamp(24px, 4.5vw, 62px); background: var(--paper); }
+.legal-eyebrow { color: var(--teal); font-size: 12px; text-transform: uppercase; letter-spacing: .11em; font-weight: 800; }
+.legal-content h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(38px, 5.5vw, 60px); line-height: 1.07; margin: 10px 0 18px; }
+.legal-content .legal-intro { font-size: 17px; line-height: 1.65; color: var(--muted); margin: 0 0 29px; }
+.legal-section { border-top: 1px solid var(--line); padding: 21px 0 4px; }
+.legal-section h2 { font-size: 19px; margin: 0 0 10px; }
+.legal-section p { color: var(--muted); font-size: 15px; line-height: 1.75; margin: 0 0 16px; }
+.legal-section a { color: var(--teal); text-decoration: underline; text-underline-offset: 3px; }
+.legal-bottom { display: flex; flex-wrap: wrap; gap: 16px 23px; max-width: 850px; margin: 23px auto 0; font-size: 13px; color: var(--muted); }
+.legal-bottom a { color: var(--teal); }
+@media (max-width: 550px) {
+  .legal-topbar { align-items: flex-start; margin-bottom: 24px; }
+  .legal-topbar .logo strong { font-size: 11px; letter-spacing: .09em; }
+  .legal-content { border-radius: 16px; padding: 24px 20px; }
+}

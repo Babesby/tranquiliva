@@ -118,12 +118,30 @@ const navItems = [
   { id: "therapists", label: "Therapists", icon: Heart },
 ] as const;
 
+const feelingArtwork: Record<string, string> = {
+  Anxious: "/checkin-emojis/moods/anxious.webp",
+  Tired: "/checkin-emojis/moods/tired.webp",
+  Overwhelmed: "/checkin-emojis/moods/overwhelmed.webp",
+  Lonely: "/checkin-emojis/moods/lonely.webp",
+  Calm: "/checkin-emojis/moods/calm.webp",
+  Hopeful: "/checkin-emojis/moods/hopeful.webp",
+  Frustrated: "/checkin-emojis/moods/frustrated.webp",
+  Grateful: "/checkin-emojis/moods/grateful.webp",
+};
+const influenceArtwork: Record<string, string> = {
+  "Work or study": "/checkin-emojis/life-areas/work-or-study.webp",
+  Relationships: "/checkin-emojis/life-areas/relationships.webp",
+  Sleep: "/checkin-emojis/life-areas/sleep.webp",
+  Health: "/checkin-emojis/life-areas/health.webp",
+  Money: "/checkin-emojis/life-areas/money.webp",
+  Climate: "/checkin-emojis/life-areas/climate.webp",
+  "Not sure": "/checkin-emojis/life-areas/not-sure.webp",
+};
+
 function Mark({ light = false }: { light?: boolean }) {
   return (
     <span className={`t-mark ${light ? "light" : ""}`} aria-hidden="true">
-      <i />
-      <i />
-      <i />
+      <img src="/favicon.svg" alt="" />
     </span>
   );
 }
@@ -131,7 +149,7 @@ function Mark({ light = false }: { light?: boolean }) {
 function Logo({ light = false }: { light?: boolean }) {
   return (
     <span className={`logo ${light ? "light" : ""}`}>
-      <Mark light={light} />
+      <img className="brand-logo-icon" src="/tranquiliva-app-logo.png" alt="" />
       <strong>TRANQUILIVA</strong>
     </span>
   );
@@ -467,7 +485,7 @@ function PublicHome({
           </button>
         </section>
       </main>
-      <GlobalFooter />
+      <GlobalFooter go={go} />
       <Dialog open={assessmentOpen} onOpenChange={setAssessmentOpen}>
         <DialogContent className="assessment-popup">
           <DialogHeader>
@@ -1041,7 +1059,14 @@ function MemberApp({
   setDark: (v: boolean) => void;
   profile: { name: string; goals: string[] };
 }) {
-  const [view, setView] = useState<AppView>("today");
+  const [view, setView] = useState<AppView>(() => {
+    if (typeof window === "undefined") return "today";
+    const requested = window.sessionStorage.getItem("tranquiliva-footer-destination");
+    window.sessionStorage.removeItem("tranquiliva-footer-destination");
+    return requested === "journal" || requested === "resources" || requested === "therapists"
+      ? requested
+      : "today";
+  });
   const [menu, setMenu] = useState(false);
   const [toast, setToast] = useState("");
   const [checkins, setCheckins] = useState<CheckinEntry[]>(() => {
@@ -1413,8 +1438,9 @@ function Today({
                       aria-pressed={feelings.includes(item)}
                       onClick={() => toggle(feelings, setFeelings, item)}
                     >
+                      <img className="context-emoji" src={feelingArtwork[item]} alt="" loading="lazy" decoding="async" />
+                      <span className="context-choice-label">{item}</span>
                       <span className="context-choice-mark" aria-hidden="true" />
-                      <span>{item}</span>
                     </button>
                   ))}
                 </div>
@@ -1433,8 +1459,9 @@ function Today({
                       aria-pressed={influences.includes(item)}
                       onClick={() => toggle(influences, setInfluences, item)}
                     >
+                      <img className="context-emoji" src={influenceArtwork[item]} alt="" loading="lazy" decoding="async" />
+                      <span className="context-choice-label">{item}</span>
                       <span className="context-choice-mark" aria-hidden="true" />
-                      <span>{item}</span>
                     </button>
                   ))}
                 </div>
@@ -3571,37 +3598,50 @@ function AppPage({
     </>
   );
 }
-function GlobalFooter({ compact = false }: { compact?: boolean }) {
+function GlobalFooter({
+  compact = false,
+  go,
+}: {
+  compact?: boolean;
+  go: (screen: Screen) => void;
+}) {
+  const openProduct = (destination: "journal" | "resources" | "therapists") => {
+    window.sessionStorage.setItem("tranquiliva-footer-destination", destination);
+    const role = window.sessionStorage.getItem("tranquiliva-auth-role");
+    go(auth?.currentUser ? (role === "therapist" ? "therapist-app" : "app") : "auth");
+  };
   return (
     <footer className={`global-footer ${compact ? "compact" : ""}`}>
       <div className="footer-brand">
         <Logo light />
         <strong>Private wellbeing for real life.</strong>
+        <p>A quieter place for reflection and support.</p>
       </div>
-      <div className="footer-links">
+      <nav className="footer-links" aria-label="Footer navigation">
         <div>
-          <strong>Product</strong>
-          <a href="#top">Home</a>
-          <a href="https://www.tranquiliva.com/journal-entry.html">Journal</a>
-          <a href="https://www.tranquiliva.com/content-feed.html">Resources</a>
-          <a href="#care">Therapists</a>
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <button type="button" onClick={() => openProduct("journal")}>Journal</button>
+          <button type="button" onClick={() => openProduct("resources")}>Resources</button>
+          <button type="button" onClick={() => openProduct("therapists")}>Therapists</button>
         </div>
         <div>
-          <strong>Company</strong>
-          <a href="https://www.tranquiliva.com/privacy-data.html">Privacy</a>
-          <a href="https://www.tranquiliva.com/safety-promise.html">Safety</a>
-          <a href="https://www.tranquiliva.com/terms.html">Terms</a>
-          <a href="https://www.tranquiliva.com/accessibility.html">Accessibility</a>
+          <strong>Information</strong>
+          <a href="/privacy">Privacy</a>
+          <a href="/safety">Safety</a>
+          <a href="/terms">Terms</a>
+          <a href="/accessibility">Accessibility</a>
         </div>
-      </div>
+      </nav>
       <div className="footer-allmorrow">
-        <strong>ALLMORROW</strong>
-        <p>TRANQUILIVA is an ALLMORROW company.</p>
+        <strong>from ALLMORROW</strong>
+        <p>Tranquiliva is a product from ALLMORROW.</p>
         <small>ALLMORROW Holdings Ltd.</small>
+        <a href="mailto:hello@tranquiliva.com">Contact support</a>
       </div>
       <div className="footer-legal">
         <span>© {new Date().getFullYear()} TRANQUILIVA</span>
-        <span>Global support. Local care.</span>
+        <span>Wellbeing support, at your pace.</span>
       </div>
     </footer>
   );
