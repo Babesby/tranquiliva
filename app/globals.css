@@ -7842,3 +7842,91 @@ body { font-size: 17px; }
     min-height: 52px;
   }
 }
+
+
+/* Consistent, readable typography throughout the signed-in product */
+.member-shell {
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.member-shell :where(p, li, blockquote) {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.member-shell :where(button, input, textarea, select) {
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.member-shell :where(small, time, label, .compact-note, .note-count) {
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.member-shell .member-sidebar nav button,
+.member-shell .side-bottom > button,
+.member-shell .side-tools button {
+  font-size: 14px;
+}
+
+.member-shell .member-profile strong {
+  font-size: 14px;
+}
+
+.member-shell .member-profile small,
+.member-shell .side-bottom > small {
+  font-size: 12px;
+}
+
+.member-shell .welcome-head h1,
+.member-shell .today-head h1,
+.member-shell .app-page-head h1 {
+  font-size: clamp(38px, 4vw, 52px);
+  line-height: 1.05;
+}
+
+.member-shell .daily-checkin > header strong,
+.member-shell .checkin-steps button,
+.member-shell .checkin-stage > strong,
+.member-shell .mood-choice-grid strong,
+.member-shell .tag-picker button,
+.member-shell .checkin-next,
+.member-shell .checkin-nav button {
+  font-size: 14px;
+}
+
+.member-shell .mood-choice-grid small,
+.member-shell .daily-checkin > header time {
+  font-size: 13px;
+}
+
+.member-shell .week-overview > div:first-child h2 {
+  font-size: 25px;
+}
+
+.member-shell .week-overview > div:first-child strong,
+.member-shell .week-days span,
+.member-shell .week-overview > button {
+  font-size: 14px;
+}
+
+@media (max-width: 760px) {
+  .member-shell {
+    font-size: 16px;
+  }
+
+  .member-content {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .member-shell .week-overview {
+    gap: 16px;
+  }
+
+  .member-shell .week-days span {
+    font-size: 12px;
+  }
+}
