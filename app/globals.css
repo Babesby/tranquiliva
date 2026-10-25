@@ -8424,3 +8424,122 @@ body { font-size: 17px; }
   .public-page .assessment-hero-button,
   .public-page .icon-dock .dock-item > .dock-art { transition: none; }
 }
+
+
+/* Tranquiliva focused usability refinements, October 2026 */
+/* Comfortable, responsive assessment layout. The existing scoring is unchanged. */
+@media (min-width: 761px) {
+  .assessment-page { padding-inline: clamp(28px, 5vw, 88px); padding-bottom: 65px; }
+  .assessment-page > header { width: min(1120px, 100%); margin-inline: auto; min-height: 86px; }
+  .assessment-page .assessment-card,
+  .assessment-page .result-card {
+    width: min(890px, 100%);
+    margin: clamp(28px, 3.6vw, 54px) auto 75px;
+    padding: clamp(34px, 4.6vw, 62px);
+    border-radius: 30px;
+  }
+  .assessment-page .assessment-count { font-size: clamp(27px, 2.4vw, 36px); line-height: 1; }
+  .assessment-page .assessment-line { margin: 17px 0 clamp(30px, 3.6vw, 48px); }
+  .assessment-page .assessment-card h1 {
+    font-size: clamp(36px, 3.9vw, 54px);
+    line-height: 1.17;
+    max-width: 740px;
+    margin: 0;
+  }
+  .assessment-page .dass-scale { margin-top: clamp(32px, 3.5vw, 46px); gap: 14px; }
+  .assessment-page .dass-scale button { min-width: 0; min-height: 110px; height: auto; padding: 22px 12px; gap: 13px; border-radius: 17px; }
+  .assessment-page .dass-scale button small { max-width: 175px; text-align: center; font-size: 14px; line-height: 1.4; }
+  .assessment-page .assessment-back { margin-top: 28px; min-height: 40px; font-size: 14px; }
+  .assessment-page .result-card h1 { font-size: clamp(36px, 4vw, 52px); }
+  .assessment-page .result-card > p { font-size: 15px; line-height: 1.6; }
+  .assessment-page .dass-results { gap: 14px; margin: 30px 0; }
+  .assessment-page .dass-results article { min-width: 0; padding: 22px 18px; }
+  .assessment-page .result-buttons { gap: 12px; }
+  .assessment-page .result-buttons button { min-height: 50px; font-size: 14px; }
+}
+@media (min-width: 761px) and (max-width: 980px) {
+  .assessment-page .dass-scale { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .assessment-page .dass-scale button { min-height: 96px; }
+  .assessment-page .dass-results { grid-template-columns: repeat(3,minmax(0,1fr)); }
+}
+@media (max-width: 760px) {
+  .assessment-page { padding-inline: clamp(16px, 4vw, 22px); }
+  .assessment-page .assessment-card,
+  .assessment-page .result-card { max-width: 560px; margin: 20px auto 0; padding: 8px 2px 28px; }
+  .assessment-page .assessment-line { margin-bottom: 30px; }
+  .assessment-page .dass-scale { margin-top: 25px; gap: 9px; }
+  .assessment-page .dass-scale button { min-height: 66px; }
+}
+.assessment-popup { width: min(620px, calc(100vw - 32px)); max-height: min(90svh, 820px); overflow-y: auto; }
+@media (min-width: 761px) {
+  .assessment-popup { padding: 45px !important; }
+  .assessment-popup [data-slot="dialog-title"] { line-height: 1.2; }
+  .assessment-popup [data-slot="dialog-description"] { font-size: 15px; line-height: 1.65; }
+  .assessment-popup .popup-measures { margin-block: 25px; }
+}
+
+/* Bigger, genuine brand identity in footer; preserve mobile wrapping. */
+.global-footer .footer-brand .logo { align-items: center; gap: 15px; max-width: 100%; }
+.global-footer .footer-brand .logo .brand-logo-icon {
+  width: 78px;
+  height: 78px;
+  border-radius: 18px;
+  flex: 0 0 78px;
+}
+.global-footer .footer-brand .logo strong { font-size: clamp(15px, 1.5vw, 20px); line-height: 1.25; letter-spacing: .1em; }
+.global-footer .footer-brand > strong { max-width: 340px; margin: -3px 0 0; font-size: clamp(22px, 2.2vw, 29px); line-height: 1.22; }
+.global-footer .footer-brand { gap: 15px; }
+@media (max-width: 760px) {
+  .global-footer .footer-brand .logo .brand-logo-icon { width: 64px; height: 64px; flex-basis: 64px; border-radius: 16px; }
+  .global-footer .footer-brand .logo strong { font-size: clamp(13px, 3.7vw, 17px); }
+  .global-footer .footer-brand > strong { font-size: 24px; }
+}
+
+/* Harmonised member typography; Talk formerly had 9–13px body and actions. */
+.member-shell .ai-boundary p,
+.member-shell .ai-history > p,
+.member-shell .ai-chat .ai-messages article p,
+.member-shell .ai-exercise p,
+.member-shell .ai-plan span,
+.member-shell .ai-tools section:first-child span,
+.member-shell .ai-disclaimer { font-size: 15px; line-height: 1.65; }
+.member-shell .ai-history > h2,
+.member-shell .ai-tools h2 { font-size: 18px; line-height: 1.35; }
+.member-shell .ai-history > button strong,
+.member-shell .ai-chat > header strong,
+.member-shell .ai-messages article strong,
+.member-shell .ai-plan strong,
+.member-shell .ai-tools button strong,
+.member-shell .ai-tools section:first-child strong,
+.member-shell .urgent-ai strong { font-size: 14px; line-height: 1.4; }
+.member-shell .ai-chat > header small,
+.member-shell .ai-history > button small,
+.member-shell .ai-composer span,
+.member-shell .ai-disclaimer,
+.member-shell .ai-history small { font-size: 13px; line-height: 1.4; }
+.member-shell .ai-boundary button,
+.member-shell .ai-history .new-ai,
+.member-shell .ai-history .clear-ai,
+.member-shell .ai-chat > header > button,
+.member-shell .ai-composer select,
+.member-shell .ai-tools button,
+.member-shell .ai-tools label { font-size: 14px; line-height: 1.4; }
+.member-shell .ai-composer textarea { font-size: 15px; line-height: 1.55; min-height: 94px; padding: 12px; }
+.member-shell .ai-messages { padding: clamp(17px, 2.1vw, 26px); }
+.member-shell .ai-messages article { max-width: min(85%, 680px); }
+.member-shell .ai-messages article p { padding: 14px 17px; }
+.member-shell .ai-history { padding: 17px; }
+.member-shell .ai-history > button:not(.new-ai):not(.clear-ai) { padding-block: 12px; }
+.member-shell .ai-chat > header { min-height: 66px; height: auto; padding-block: 11px; }
+.member-shell .ai-composer { padding: 14px; }
+.member-shell .ai-composer button { width: 42px; height: 42px; }
+.member-shell .ai-tools { padding: 18px; }
+.member-shell .ai-tools button { min-height: 46px; }
+@media (max-width: 760px) {
+  .member-shell .ai-messages article { max-width: 94%; }
+  .member-shell .ai-boundary { flex-wrap: wrap; }
+  .member-shell .ai-boundary button { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .member-shell .ai-messages, .assessment-page { scroll-behavior: auto; }
+}

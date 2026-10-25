@@ -334,8 +334,10 @@ function PublicHome({
 }) {
   const [assessmentOpen, setAssessmentOpen] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
-  const [activeFeature, setActiveFeature] = useState<(typeof landingFeatures)[number]["id"] | null>(null);
-  const selectedFeature = landingFeatures.find((item) => item.id === activeFeature);
+  const openFeature = (destination: (typeof landingFeatures)[number]["destination"]) => {
+    window.sessionStorage.setItem("tranquiliva-footer-destination", destination);
+    go(auth?.currentUser ? "app" : "auth");
+  };
   return (
     <div className="public-page" id="top">
       <header className="public-nav">
@@ -401,13 +403,13 @@ function PublicHome({
             <div className="floating-checkin">
               <strong>What do you need?</strong>
               <div>
-                <button type="button" aria-label="Explore Practise" onClick={() => setActiveFeature("practise")}>
+                <button type="button" aria-label="Explore Practise" onClick={() => openFeature("resources")}>
                   <Leaf />
                 </button>
-                <button type="button" aria-label="Explore Reflect" onClick={() => setActiveFeature("reflect")}>
+                <button type="button" aria-label="Explore Reflect" onClick={() => openFeature("journal")}>
                   <PenLine />
                 </button>
-                <button type="button" aria-label="Explore Talk" onClick={() => setActiveFeature("talk")}>
+                <button type="button" aria-label="Explore Talk" onClick={() => openFeature("talk")}>
                   <MessageCircle />
                 </button>
               </div>
@@ -430,7 +432,7 @@ function PublicHome({
               type="button"
               className={`dock-item ${item.id}`}
               aria-label={`Explore ${item.label}. ${item.description}`}
-              onClick={() => setActiveFeature(item.id)}
+              onClick={() => openFeature(item.destination)}
             >
               <span className="dock-art" aria-hidden="true">
                 <img src={item.icon} alt="" width={640} height={640} loading="lazy" decoding="async" />
@@ -442,27 +444,12 @@ function PublicHome({
 
         <section className="care-showcase" id="care">
           <div className="care-copy">
-            <h2>Human care without the maze.</h2>
-            <button className="light-button" onClick={() => go("auth")}>
-              Find verified care <ArrowRight />
-            </button>
+            <h2>Find verified care.</h2>
           </div>
           <div className="care-access-grid">
             <span><ShieldCheck /><strong>Verified professionals</strong></span>
             <span><CalendarDays /><strong>Private requests</strong></span>
             <span><LockKeyhole /><strong>Protected sessions</strong></span>
-          </div>
-        </section>
-
-        <section className="trust-section" id="trust">
-          <div>
-            <h2>Yours means yours.</h2>
-          </div>
-          <div className="trust-points">
-            <strong>Private history</strong>
-            <strong>Export and delete</strong>
-            <strong>No advertising</strong>
-            <strong>No data sales</strong>
           </div>
         </section>
 
@@ -473,26 +460,6 @@ function PublicHome({
         </section>
       </main>
       <GlobalFooter go={go} />
-      <Dialog open={activeFeature !== null} onOpenChange={(open) => { if (!open) setActiveFeature(null); }}>
-        <DialogContent className="feature-preview-dialog">
-          <DialogHeader>
-            <DialogTitle>{selectedFeature?.label}</DialogTitle>
-            <DialogDescription>{selectedFeature?.description}</DialogDescription>
-          </DialogHeader>
-          <button
-            type="button"
-            className="solid-button feature-preview-action"
-            onClick={() => {
-              if (!selectedFeature) return;
-              window.sessionStorage.setItem("tranquiliva-footer-destination", selectedFeature.destination);
-              setActiveFeature(null);
-              go("auth");
-            }}
-          >
-            Explore {selectedFeature?.label} <ArrowRight aria-hidden="true" />
-          </button>
-        </DialogContent>
-      </Dialog>
       <Dialog open={assessmentOpen} onOpenChange={setAssessmentOpen}>
         <DialogContent className="assessment-popup">
           <DialogHeader>
@@ -536,7 +503,7 @@ function Auth({
   go: (s: Screen) => void;
   onLogin: (role: "member" | "therapist", name: string) => void;
 }) {
-  const [mode, setMode] = useState<"signin" | "signup">("signup");
+  const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [role, setRole] = useState<"member" | "therapist">("member");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -555,6 +522,9 @@ function Auth({
     }
     if (message.includes("operation-not-allowed")) {
       return "Email and password sign in is not enabled yet.";
+    }
+    if (message.includes("auth/user-not-found") || message.includes("auth/invalid-credential") || message.includes("auth/invalid-login-credentials")) {
+      return "We couldn't sign you in. Check your details, or create an account if you're new.";
     }
     return message
       .replace("Firebase: Error ", "")
@@ -662,18 +632,12 @@ function Auth({
             <button className={role === "member" ? "active" : ""} onClick={() => setRole("member")}>Member</button>
             <button className={role === "therapist" ? "active" : ""} onClick={() => setRole("therapist")}>Therapist</button>
           </div>
-          <div className="auth-tabs">
-            <button
-              className={mode === "signup" ? "active" : ""}
-              onClick={() => setMode("signup")}
-            >
-              Create account
-            </button>
-            <button
-              className={mode === "signin" ? "active" : ""}
-              onClick={() => setMode("signin")}
-            >
+          <div className="auth-tabs" aria-label="Account access">
+            <button type="button" className={mode === "signin" ? "active" : ""} onClick={() => { setMode("signin"); setError(""); setSuccess(""); }}>
               Sign in
+            </button>
+            <button type="button" className={mode === "signup" ? "active" : ""} onClick={() => { setMode("signup"); setError(""); setSuccess(""); }}>
+              Create account
             </button>
           </div>
           <h1>
@@ -697,7 +661,7 @@ function Auth({
                 <input
                   type={show ? "text" : "password"}
                   required
-                  minLength={8}
+                  minLength={mode === "signup" ? 8 : undefined}
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="At least 8 characters"
@@ -729,8 +693,14 @@ function Auth({
               <button className="auth-reset" type="button" onClick={resetPassword}>Forgot password</button>
             )}
           </form>
-          {error && <p className="auth-status error">{error}</p>}
+          {error && <p className="auth-status error" role="alert">{error}</p>}
           {success && <p className="auth-status success">{success}</p>}
+          <p className="auth-switch">
+            {mode === "signin" ? "Don't have an account?" : "Already have an account?"}{" "}
+            <button type="button" onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(""); setSuccess(""); }}>
+              {mode === "signin" ? "Create account" : "Sign in"}
+            </button>
+          </p>
           <p className="auth-note">
             <LockKeyhole />
             Firebase secured account access.
@@ -1429,13 +1399,11 @@ function Today({
           <div className="checkin-stage checkin-context-stage">
             <div className="context-intro">
               <h3>What else is present?</h3>
-              <p>Select anything that feels relevant. You can skip this step.</p>
             </div>
             <div className="context-groups">
               <section className="context-group" aria-labelledby="checkin-feelings-title">
                 <div className="context-group-heading">
                   <h4 id="checkin-feelings-title">Feelings</h4>
-                  <p>What you&apos;re noticing inside</p>
                 </div>
                 <div className="context-options">
                   {feelingOptions.map((item) => (
@@ -1456,7 +1424,6 @@ function Today({
               <section className="context-group" aria-labelledby="checkin-influences-title">
                 <div className="context-group-heading">
                   <h4 id="checkin-influences-title">What may be influencing this?</h4>
-                  <p>Anything that might be playing a part</p>
                 </div>
                 <div className="context-options">
                   {influenceOptions.map((item) => (
@@ -3622,8 +3589,7 @@ function GlobalFooter({
     <footer className={`global-footer ${compact ? "compact" : ""}`}>
       <div className="footer-brand">
         <Logo light />
-        <strong>Private wellbeing for real life.</strong>
-        <p>A quieter place for reflection and support.</p>
+        <strong>A calmer place for your mind to land.</strong>
       </div>
       <nav className="footer-links" aria-label="Footer navigation">
         <div>
