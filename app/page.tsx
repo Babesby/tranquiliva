@@ -50,7 +50,13 @@ import {
   signOut,
 } from "firebase/auth";
 import { ref, set } from "firebase/database";
-import { auth, firebaseConfigured, googleProvider, prepareFirebaseAuth } from "@/lib/firebase";
+import {
+  auth,
+  ensureFirebasePersistence,
+  firebaseConfigured,
+  googleProvider,
+  prepareFirebaseAuth,
+} from "@/lib/firebase";
 import {
   backupUserData,
   readAccountRole,
