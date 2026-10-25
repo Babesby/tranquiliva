@@ -7682,3 +7682,163 @@ body { font-size: 17px; }
     flex-basis: 40px;
   }
 }
+
+/* Authentication visibility and mobile assessment finish */
+.auth-form-wrap label {
+  display: block;
+}
+.auth-form-wrap .consent-row {
+  display: flex;
+}
+.auth-note {
+  display: flex;
+}
+
+@media (max-width: 760px) {
+  .auth-page {
+    display: block;
+    padding: 0;
+  }
+  .auth-art {
+    display: none;
+  }
+  .auth-back {
+    top: 14px;
+    left: 14px;
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.72);
+    border-color: var(--line);
+  }
+  .auth-panel {
+    min-height: 100svh;
+    padding: 76px 20px 32px;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .auth-form-wrap {
+    width: 100%;
+    max-width: 480px;
+  }
+  .auth-form-wrap > .logo {
+    margin-bottom: 28px;
+  }
+  .auth-form-wrap h1 {
+    margin-bottom: 22px;
+    font-size: clamp(38px, 12vw, 52px);
+  }
+  .auth-form-wrap label {
+    font-size: 11px;
+  }
+  .auth-form-wrap input {
+    font-size: 16px;
+  }
+
+  .assessment-page {
+    min-height: 100svh;
+    padding: 0 20px 32px;
+  }
+  .assessment-page > header {
+    height: 68px;
+  }
+  .assessment-page > header .logo strong {
+    font-size: 10px;
+  }
+  .assessment-page > header button {
+    min-height: 42px;
+    padding: 0 4px;
+    font-size: 13px;
+  }
+  .assessment-card,
+  .result-card {
+    width: 100%;
+    margin: 14px auto 0;
+    padding: 8px 0 24px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+  .assessment-count {
+    font-size: 24px;
+  }
+  .assessment-count b {
+    font-size: 13px;
+  }
+  .assessment-line {
+    margin: 10px 0 32px;
+  }
+  .assessment-card h1 {
+    max-width: none;
+    margin: 0;
+    font-size: clamp(29px, 8.5vw, 39px);
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+  }
+  .dass-scale {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 30px;
+  }
+  .dass-scale button {
+    min-height: 62px;
+    height: auto;
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    align-items: center;
+    justify-items: start;
+    gap: 12px;
+    padding: 10px 16px;
+    border-radius: 14px;
+    text-align: left;
+  }
+  .dass-scale button b {
+    font-size: 26px;
+  }
+  .dass-scale button small {
+    font-size: 14px;
+    line-height: 1.25;
+  }
+  .assessment-back {
+    min-height: 44px;
+    margin-top: 14px;
+    font-size: 13px;
+  }
+  .result-card h1 {
+    font-size: 34px;
+  }
+  .dass-results {
+    display: block;
+    margin: 22px 0;
+  }
+  .dass-results article {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 0;
+    border: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 0;
+    background: transparent;
+    text-align: left;
+  }
+  .dass-results article > strong {
+    font-size: 34px;
+  }
+  .dass-results h2,
+  .dass-results p {
+    margin: 0;
+  }
+  .result-buttons {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+  .result-buttons button {
+    width: 100%;
+    min-height: 52px;
+  }
+}

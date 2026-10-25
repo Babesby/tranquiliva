@@ -509,6 +509,12 @@ function Auth({
   };
   const friendlyError = (value: unknown) => {
     const message = value instanceof Error ? value.message : "Sign in failed.";
+    if (message.includes("configuration-not-found")) {
+      return "Firebase Authentication is not enabled for this project yet.";
+    }
+    if (message.includes("operation-not-allowed")) {
+      return "Email and password sign in is not enabled yet.";
+    }
     return message
       .replace("Firebase: Error ", "")
       .replace(/\(auth\/(.*?)\)\.?/, "$1")
