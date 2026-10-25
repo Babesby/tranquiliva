@@ -178,7 +178,9 @@ export default function Tranquiliva() {
     if (!auth) {
       return;
     }
+        void ensureFirebasePersistence().catch(() => undefined);
     let syncTimer: number | undefined;
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (syncTimer) window.clearInterval(syncTimer);
       if (!user) {
@@ -193,8 +195,8 @@ export default function Tranquiliva() {
       }
       hadAuthenticatedUser.current = true;
       try {
-        await restoreUserData(user.uid);
-        const role = await readAccountRole(user.uid);
+        await restoreUserData(user.uid).catch(() => undefined);
+        const role = await readAccountRole(user.uid).catch(() => "member" as const);
         const token = await user.getIdToken();
         window.sessionStorage.setItem("tranquiliva-id-token", token);
         window.sessionStorage.setItem("tranquiliva-user-id", user.uid);
@@ -203,7 +205,15 @@ export default function Tranquiliva() {
         if (stored) setProfileState(JSON.parse(stored));
         const onboardingPending = window.sessionStorage.getItem("tranquiliva-onboarding-pending");
         const authTransition = window.sessionStorage.getItem("tranquiliva-auth-transition");
-        if (!onboardingPending && !authTransition) setScreen(role === "therapist" ? "therapist-app" : "app");
+        if (!authTransition) {
+          setScreen(
+            onboardingPending
+              ? "onboarding"
+              : role === "therapist"
+                ? "therapist-app"
+                : "app",
+          );
+        }
         syncTimer = window.setInterval(() => void backupUserData(user.uid), 5000);
       } finally {
         setAuthReady(true);
@@ -1149,7 +1159,7 @@ function MemberApp({
           {view === "causecanvas" && <CauseCanvas notify={notify} />}{" "}
           {view === "history" && <History entries={checkins} />}{" "}
           {view === "privacy" && <Privacy go={go} notify={notify} />}
-          <GlobalFooter compact />
+          
         </div>
       </main>
       {toast && (
