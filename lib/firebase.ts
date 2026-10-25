@@ -36,10 +36,20 @@ export const database = firebaseApp ? getDatabase(firebaseApp) : null;
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: "select_account" });
 
+let persistencePromise: Promise<void> | null = null;
+
+export async function ensureFirebasePersistence() {
+  if (!auth) {
+    throw new Error("Firebase Authentication is not configured.");
+  }
+  persistencePromise ??= setPersistence(auth, browserLocalPersistence);
+  await persistencePromise;
+}
+
 export async function prepareFirebaseAuth() {
   if (!auth || !database) {
     throw new Error("Firebase is not configured. Add the public Firebase variables in Vercel.");
   }
-  await setPersistence(auth, browserLocalPersistence);
+  await ensureFirebasePersistence();
   return { auth, database };
 }
