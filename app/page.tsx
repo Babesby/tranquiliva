@@ -1337,7 +1337,6 @@ function Today({
             <strong>Daily check in</strong>
             <h2>How are you, right now?</h2>
           </div>
-          <time>{date}</time>
         </header>
         <div className="checkin-steps">
           {["Mood", "Context", "Note"].map((label, i) => (
@@ -1394,31 +1393,52 @@ function Today({
           </div>
         )}
         {step === 2 && (
-          <div className="checkin-stage">
-            <h3>What else is present?</h3>
-            <strong>Feelings</strong>
-            <div className="tag-picker">
-              {feelingOptions.map((item) => (
-                <button
-                  key={item}
-                  className={feelings.includes(item) ? "active" : ""}
-                  onClick={() => toggle(feelings, setFeelings, item)}
-                >
-                  {item}
-                </button>
-              ))}
+          <div className="checkin-stage checkin-context-stage">
+            <div className="context-intro">
+              <h3>What else is present?</h3>
+              <p>Select anything that feels relevant. You can skip this step.</p>
             </div>
-            <strong>What may be influencing this?</strong>
-            <div className="tag-picker">
-              {influenceOptions.map((item) => (
-                <button
-                  key={item}
-                  className={influences.includes(item) ? "active" : ""}
-                  onClick={() => toggle(influences, setInfluences, item)}
-                >
-                  {item}
-                </button>
-              ))}
+            <div className="context-groups">
+              <section className="context-group" aria-labelledby="checkin-feelings-title">
+                <div className="context-group-heading">
+                  <h4 id="checkin-feelings-title">Feelings</h4>
+                  <p>What you&apos;re noticing inside</p>
+                </div>
+                <div className="context-options">
+                  {feelingOptions.map((item) => (
+                    <button
+                      type="button"
+                      key={item}
+                      className="context-choice"
+                      aria-pressed={feelings.includes(item)}
+                      onClick={() => toggle(feelings, setFeelings, item)}
+                    >
+                      <span className="context-choice-mark" aria-hidden="true" />
+                      <span>{item}</span>
+                    </button>
+                  ))}
+                </div>
+              </section>
+              <section className="context-group" aria-labelledby="checkin-influences-title">
+                <div className="context-group-heading">
+                  <h4 id="checkin-influences-title">What may be influencing this?</h4>
+                  <p>Anything that might be playing a part</p>
+                </div>
+                <div className="context-options">
+                  {influenceOptions.map((item) => (
+                    <button
+                      type="button"
+                      key={item}
+                      className="context-choice"
+                      aria-pressed={influences.includes(item)}
+                      onClick={() => toggle(influences, setInfluences, item)}
+                    >
+                      <span className="context-choice-mark" aria-hidden="true" />
+                      <span>{item}</span>
+                    </button>
+                  ))}
+                </div>
+              </section>
             </div>
             <div className="checkin-nav">
               <button onClick={() => setStep(1)}>

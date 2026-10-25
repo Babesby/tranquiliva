@@ -7930,3 +7930,184 @@ body { font-size: 17px; }
     font-size: 12px;
   }
 }
+
+/* Daily Check-in — open, responsive context choices. */
+.checkin-context-stage {
+  padding: clamp(20px, 3vw, 36px);
+}
+.checkin-context-stage .context-intro h3 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(26px, 2.7vw, 32px);
+  font-weight: 500;
+  line-height: 1.2;
+}
+.checkin-context-stage .context-intro p {
+  margin: 9px 0 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.context-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 4vw, 52px);
+  margin-top: 28px;
+}
+.context-group {
+  min-width: 0;
+}
+.context-group + .context-group {
+  border-left: 1px solid var(--line);
+  padding-left: clamp(24px, 4vw, 52px);
+}
+.context-group-heading h4 {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.35;
+  font-weight: 750;
+}
+.context-group-heading p {
+  margin: 5px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.context-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 14px;
+  margin-top: 15px;
+}
+.member-shell .context-choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  min-height: 50px;
+  padding: 11px 3px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: left;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.35;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+  transition: color .18s ease, background-color .18s ease;
+}
+.context-choice-mark {
+  flex: 0 0 21px;
+  width: 21px;
+  height: 21px;
+  border: 1.5px solid color-mix(in srgb, var(--muted) 48%, var(--line));
+  border-radius: 50%;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  transition: background-color .18s ease, border-color .18s ease;
+}
+.context-choice-mark::after {
+  content: "";
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: translateY(-1px) rotate(-45deg);
+  opacity: 0;
+}
+.member-shell .context-choice[aria-pressed="true"] {
+  color: var(--teal);
+  font-weight: 750;
+}
+.context-choice[aria-pressed="true"] .context-choice-mark {
+  background: var(--teal);
+  border-color: var(--teal);
+}
+.context-choice[aria-pressed="true"] .context-choice-mark::after {
+  opacity: 1;
+}
+.member-shell .context-choice:hover {
+  background: color-mix(in srgb, var(--aqua) 7%, transparent);
+}
+.member-shell .context-choice:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+.checkin-context-stage .checkin-nav {
+  margin-top: 31px;
+  padding-top: 17px;
+  border-top: 1px solid var(--line);
+}
+:root[data-theme="dark"] .member-shell .context-choice[aria-pressed="true"] {
+  color: var(--aqua);
+}
+:root[data-theme="dark"] .context-choice[aria-pressed="true"] .context-choice-mark {
+  background: var(--teal);
+  border-color: var(--aqua);
+}
+@media (max-width: 1150px) {
+  .context-groups {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 27px;
+  }
+  .context-group + .context-group {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding-left: 0;
+    padding-top: 26px;
+  }
+}
+@media (max-width: 600px) {
+  .daily-checkin > header {
+    padding: 21px 18px;
+  }
+  .daily-checkin > header h2 {
+    font-size: clamp(25px, 7vw, 32px);
+    line-height: 1.15;
+  }
+  .checkin-context-stage {
+    padding: 22px 17px 24px;
+  }
+  .checkin-context-stage .context-intro h3 {
+    font-size: 26px;
+  }
+  .context-groups {
+    gap: 23px;
+    margin-top: 24px;
+  }
+  .context-options {
+    column-gap: 10px;
+  }
+  .member-shell .context-choice {
+    min-height: 49px;
+    font-size: 14px;
+    gap: 8px;
+  }
+  .checkin-context-stage .checkin-nav {
+    gap: 12px;
+  }
+  .checkin-context-stage .checkin-nav button {
+    min-height: 44px;
+  }
+}
+@media (max-width: 350px) {
+  .context-options {
+    column-gap: 6px;
+  }
+  .member-shell .context-choice {
+    font-size: 13px;
+    gap: 6px;
+  }
+  .context-choice-mark {
+    flex-basis: 19px;
+    width: 19px;
+    height: 19px;
+  }
+}
