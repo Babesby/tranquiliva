@@ -629,18 +629,9 @@ function Auth({
           src="/hero-sculptures/held-in-stillness.webp"
           alt="Held in Stillness: a welcoming sculptural portrait of two relaxed people"
         />
-        <div className="auth-art-overlay">
-          <Logo light />
-          <blockquote>“A private place to arrive as you are.”</blockquote>
-          <span>
-            <ShieldCheck />
-            Your wellbeing data is never sold.
-          </span>
-        </div>
       </div>
       <main className="auth-panel">
         <div className="auth-form-wrap">
-          <Logo />
           <div className="role-switch" aria-label="Account type">
             <button className={role === "member" ? "active" : ""} onClick={() => setRole("member")}>Member</button>
             <button className={role === "therapist" ? "active" : ""} onClick={() => setRole("therapist")}>Therapist</button>
@@ -660,7 +651,13 @@ function Auth({
           </h1>
           {role === "member" && (
             <button className="auth-provider" type="button" onClick={googleSignIn} disabled={busy}>
-              <span aria-hidden="true">G</span> Continue with Google
+              <svg className="google-brand-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.27 5.48-4.79 7.18l7.73 6C44.39 38.03 46.98 31.87 46.98 24.55z" />
+                <path fill="#FBBC05" d="M10.53 28.59A14.41 14.41 0 0 1 9.75 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.87 23.87 0 0 0 0 24c0 3.87.93 7.51 2.56 10.78l7.97-6.19z" />
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.91-5.79l-7.73-6c-2.15 1.45-4.92 2.3-8.18 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+              </svg>
+              <span>Continue with Google</span>
             </button>
           )}
           <form onSubmit={submit}>
@@ -691,7 +688,7 @@ function Auth({
             {mode === "signup" && (
               <label className="consent-row">
                 <input type="checkbox" required />
-                <span>I agree to the Terms and Privacy Notice.</span>
+                <span>I agree to the <a href="/terms" target="_blank" rel="noopener noreferrer">Terms</a> and <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Notice</a>.</span>
               </label>
             )}
             <button className="auth-submit" disabled={busy}>
@@ -713,10 +710,6 @@ function Auth({
             <button type="button" onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(""); setSuccess(""); }}>
               {mode === "signin" ? "Create account" : "Sign in"}
             </button>
-          </p>
-          <p className="auth-note">
-            <LockKeyhole />
-            Firebase secured account access.
           </p>
         </div>
       </main>
