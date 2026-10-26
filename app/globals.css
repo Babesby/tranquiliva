@@ -8611,3 +8611,106 @@ body { font-size: 17px; }
   .public-nav .logo .brand-logo-icon { width: 38px; height: 38px; flex-basis: 38px; }
   .public-nav .logo strong { font-size: 12px; letter-spacing: .065em; }
 }
+
+
+/* Tranquiliva targeted care + uncropped hero repair, 2026-10-26 */
+/* Maintain the existing heading and all three care features; no hero cropping. */
+@media (min-width: 1051px) {
+  .public-page .hero-luxe {
+    grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+    gap: clamp(25px, 4vw, 66px);
+    padding: clamp(38px, 5vw, 78px);
+    align-items: center;
+  }
+  .public-page .hero-image-wrap {
+    height: clamp(470px, 47vw, 710px);
+  }
+}
+.public-page .hero-luxe .hero-copy { min-width: 0; }
+.public-page .hero-luxe .hero-image-wrap {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 72%, rgba(81, 195, 195, .24), transparent 65%),
+              linear-gradient(155deg, #173b43, #0a2832);
+}
+.public-page .hero-luxe .hero-image-wrap > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: clamp(8px, 1.5vw, 22px);
+  object-fit: contain;
+  object-position: center center;
+}
+/* The transparent artwork should not be darkened by the old photo overlay. */
+.public-page .hero-luxe .hero-image-wrap::after { display: none; }
+/* Keep feature content centered after removing the illustration. */
+.public-page .care-showcase {
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 34px);
+  justify-items: center;
+  padding: clamp(32px, 4.5vw, 64px);
+}
+.public-page .care-showcase .care-copy {
+  width: 100%;
+  min-width: 0;
+  text-align: center;
+}
+.public-page .care-showcase .care-access-grid {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: 100%;
+  max-width: 1020px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(10px, 1.6vw, 18px);
+}
+.public-page .care-showcase .care-access-grid > span {
+  min-width: 0;
+  width: 100%;
+}
+/* The old v2 stylesheet explicitly set these labels to dark text. */
+:root[data-theme="dark"] .public-page .care-showcase .care-access-grid > span {
+  color: #fff;
+  background: rgba(255, 255, 255, .09);
+  border-color: rgba(255, 255, 255, .22);
+}
+:root[data-theme="dark"] .public-page .care-showcase .care-access-grid > span strong { color: #fff; }
+:root[data-theme="dark"] .public-page .care-showcase .care-access-grid > span svg { color: var(--aqua); }
+@media (max-width: 1050px) {
+  .public-page .hero-luxe {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(18px, 3vw, 32px);
+    min-height: 0;
+    padding: clamp(26px, 5vw, 46px);
+  }
+  .public-page .hero-luxe .hero-copy {
+    order: 0;
+    padding: 0;
+    text-align: center;
+  }
+  .public-page .hero-luxe .hero-image-wrap {
+    order: 1;
+    width: min(100%, 660px);
+    height: clamp(420px, 65vw, 650px);
+    margin: 0 auto;
+  }
+  .public-page .care-showcase .care-access-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  .public-page .hero-luxe {
+    padding: 30px 18px 24px;
+    gap: 20px;
+  }
+  .public-page .hero-luxe .hero-image-wrap {
+    width: 100%;
+    height: clamp(300px, 105vw, 520px);
+    border-radius: 30px;
+  }
+  .public-page .care-showcase .care-access-grid {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 490px;
+  }
+}

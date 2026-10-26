@@ -455,11 +455,7 @@ function PublicHome({
           <div className="care-copy">
             <h2>Find verified care.</h2>
           </div>
-          <div className="care-visual">
-            <img src="/hero-sculptures/gentle-unfolding.webp"
-              alt="Gentle Unfolding: a calming sculpture of two people seated on a flowing ribbon"
-              loading="lazy" decoding="async" />
-          </div>
+
           <div className="care-access-grid">
             <span><ShieldCheck /><strong>Verified professionals</strong></span>
             <span><CalendarDays /><strong>Private requests</strong></span>
@@ -1179,7 +1175,7 @@ function MemberApp({
           {view === "causecanvas" && <CauseCanvas notify={notify} />}{" "}
           {view === "history" && <History entries={checkins} />}{" "}
           {view === "privacy" && <Privacy go={go} notify={notify} />}
-          
+
         </div>
       </main>
       {toast && (
