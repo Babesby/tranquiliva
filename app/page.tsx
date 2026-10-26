@@ -40,6 +40,7 @@ import {
   X,
 } from "lucide-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import {
   createUserWithEmailAndPassword,
   getAdditionalUserInfo,
@@ -463,13 +464,24 @@ function PublicHome({
           </div>
         </section>
 
-        <section className="final-cta">
-          <img className="final-cta-art"
-            src="/hero-sculptures/room-to-breathe.webp"
-            alt="Room to Breathe: calm figures in a spacious sculptural arch"
-            loading="lazy" decoding="async" />
-          <h2>Take one quiet minute.</h2>
-
+        <section className="final-cta thought-orbit" aria-label="Take one quiet minute amid racing thoughts">
+          <div className="thought-orbit-scene">
+            {/* Decorative thought bubbles form a ring of noise around a quiet centre. */}
+            <Image className="thought-bubble" src="/thought-bubbles/01-understands.webp" alt="" width={450} height={450} sizes="(max-width: 760px) 32vw, 200px" loading="lazy" />
+            <Image className="thought-bubble" src="/thought-bubbles/02-tired.webp" alt="" width={450} height={450} sizes="(max-width: 760px) 32vw, 200px" loading="lazy" />
+            <Image className="thought-bubble" src="/thought-bubbles/03-breathe.webp" alt="" width={450} height={450} sizes="(max-width: 760px) 32vw, 200px" loading="lazy" />
+            <Image className="thought-bubble" src="/thought-bubbles/04-nothing-right.webp" alt="" width={450} height={450} sizes="(max-width: 760px) 32vw, 200px" loading="lazy" />
+            <Image className="thought-bubble" src="/thought-bubbles/05-struggling.webp" alt="" width={450} height={450} sizes="(max-width: 760px) 32vw, 200px" loading="lazy" />
+            <Image className="thought-bubble" src="/thought-bubbles/06-ever-end.webp" alt="" width={450} height={450} sizes="(max-width: 760px) 32vw, 200px" loading="lazy" />
+            <Image className="thought-bubble" src="/thought-bubbles/07-problem.webp" alt="" width={450} height={450} sizes="(max-width: 760px) 32vw, 200px" loading="lazy" />
+            <Image className="thought-bubble" src="/thought-bubbles/08-stop.webp" alt="" width={450} height={450} sizes="(max-width: 760px) 32vw, 200px" loading="lazy" />
+            <Image className="thought-bubble" src="/thought-bubbles/09-what-if.webp" alt="" width={450} height={450} sizes="(max-width: 760px) 32vw, 200px" loading="lazy" />
+            <Image className="thought-bubble" src="/thought-bubbles/10-why.webp" alt="" width={450} height={450} sizes="(max-width: 760px) 32vw, 200px" loading="lazy" />
+            <Image className="thought-bubble" src="/thought-bubbles/11-fault.webp" alt="" width={450} height={450} sizes="(max-width: 760px) 32vw, 200px" loading="lazy" />
+            <div className="thought-orbit-center">
+              <h2>Take one quiet minute.</h2>
+            </div>
+          </div>
         </section>
       </main>
       <GlobalFooter go={go} />
@@ -2022,6 +2034,17 @@ function Resources({ notify }: { notify: (m: string) => void }) {
           ),
         )}
       </nav>
+      {tab === "Wellness studio" && (
+        <section className="resources-breathe-banner">
+          <div><h2>Room to breathe.</h2></div>
+          <Image
+            src="/hero-sculptures/room-to-breathe.webp"
+            alt="Two calm figures resting inside a spacious sculptural arch"
+            width={440} height={550}
+            sizes="(max-width: 760px) 38vw, 280px"
+          />
+        </section>
+      )}
       {tab !== "Wellness studio" ? (
         <>
           <section className="resource-controls">
