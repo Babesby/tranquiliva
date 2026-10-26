@@ -293,42 +293,42 @@ const landingFeatures = [
   {
     id: "talk",
     label: "Talk",
-    icon: "/action-icons/talk.webp",
+    icon: "/editorial-icons/talk.png",
     description: "A private space to talk through what is on your mind.",
     destination: "talk",
   },
   {
     id: "reflect",
     label: "Reflect",
-    icon: "/action-icons/reflect.webp",
+    icon: "/editorial-icons/reflect.png",
     description: "Write privately and notice patterns in your reflections.",
     destination: "journal",
   },
   {
     id: "practise",
     label: "Practise",
-    icon: "/action-icons/practise.webp",
+    icon: "/editorial-icons/practise.png",
     description: "Try gentle grounding exercises and practical wellbeing tools.",
     destination: "resources",
   },
   {
     id: "connect",
     label: "Connect",
-    icon: "/action-icons/connect.webp",
+    icon: "/editorial-icons/connect.png",
     description: "Explore supportive, moderated community spaces.",
     destination: "community",
   },
   {
     id: "care",
     label: "Care",
-    icon: "/action-icons/care.webp",
+    icon: "/editorial-icons/care.png",
     description: "Find out about private care from verified therapists.",
     destination: "therapists",
   },
   {
     id: "learn",
     label: "Learn",
-    icon: "/action-icons/learn.webp",
+    icon: "/editorial-icons/learn.png",
     description: "Discover how your mind works in Know Your Brain.",
     destination: "brain",
   },
@@ -431,7 +431,7 @@ function PublicHome({
         </section>
 
         <section className="luxe-statement action-click-cue" aria-label="Explore the six Tranquiliva features below">
-          <img src="/action-icons/click.webp" width={104} height={104} alt="" aria-hidden="true" />
+          <img src="/editorial-icons/click.png" width={104} height={104} alt="" aria-hidden="true" />
           <span>Tap an icon to explore</span>
         </section>
 
