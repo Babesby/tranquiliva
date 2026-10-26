@@ -1279,11 +1279,11 @@ function Today({
   const [influences, setInfluences] = useState<string[]>([]);
   const [note, setNote] = useState("");
   const moods = [
-    ["Struggling", "Heavy or painful"],
-    ["Low", "Flat or drained"],
-    ["Unsettled", "Tense or unsure"],
-    ["Okay", "Steady enough"],
-    ["Good", "Light or settled"],
+    "Struggling",
+    "Low",
+    "Unsettled",
+    "Okay",
+    "Good",
   ];
   const feelingOptions = [
     "Anxious",
@@ -1365,12 +1365,11 @@ function Today({
             <div className="mood-choice-grid">
               {moods.map((item) => (
                 <button
-                  key={item[0]}
-                  className={mood === item[0] ? "active" : ""}
-                  onClick={() => setMood(item[0])}
+                  key={item}
+                  className={mood === item ? "active" : ""}
+                  onClick={() => setMood(item)}
                 >
-                  <strong>{item[0]}</strong>
-                  <small>{item[1]}</small>
+                  <strong>{item}</strong>
                 </button>
               ))}
             </div>
