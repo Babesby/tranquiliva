@@ -171,7 +171,7 @@ export default function Tranquiliva() {
   const [screen, setScreen] = useState<Screen>("public");
   const [authReady, setAuthReady] = useState(!firebaseConfigured);
   const hadAuthenticatedUser = useRef(false);
-  const [dark, setDark] = useState(true);
+  const [dark, setDark] = useState(false);
   const setDarkPreference = (next: boolean) => {
     setDark(next);
     if (typeof window !== "undefined") {
@@ -197,7 +197,7 @@ export default function Tranquiliva() {
 
   useEffect(() => {
     const preference = window.localStorage.getItem("tranquiliva-theme");
-    if (preference === "light") setDark(false);
+    if (preference === "dark") setDark(true);
   }, []);
   useEffect(() => {
     document.documentElement.dataset.theme = dark ? "dark" : "light";
@@ -1517,12 +1517,9 @@ function Talk({ name, notify }: { name: string; notify: (m: string) => void }) {
     updatedAt: string;
     messages: AiMessage[];
   };
-  const greeting = `Hi ${name}. What would feel useful to talk through?`;
+  const greeting = "What is on your mind?";
   const [text, setText] = useState("");
-  const [language, setLanguage] = useState("English");
-  const [messages, setMessages] = useState<AiMessage[]>([
-    { role: "assistant", text: greeting },
-  ]);
+  const [messages, setMessages] = useState<AiMessage[]>([]);
   const [histories, setHistories] = useState<AiSession[]>(() => {
     if (typeof window === "undefined") return [];
     try {
@@ -1535,12 +1532,10 @@ function Talk({ name, notify }: { name: string; notify: (m: string) => void }) {
   });
   const [clearOpen, setClearOpen] = useState(false);
   const [privacyOpen, setPrivacyOpen] = useState(false);
-  const [journalConsent, setJournalConsent] = useState(false);
-  const [exercise, setExercise] = useState<"breathing" | "grounding" | null>(
-    null,
-  );
   const [urgent, setUrgent] = useState(false);
   const [aiBusy, setAiBusy] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [chatError, setChatError] = useState("");
   useEffect(() => {
     window.localStorage.setItem(
       "tranquiliva-ai-history",
@@ -1548,30 +1543,32 @@ function Talk({ name, notify }: { name: string; notify: (m: string) => void }) {
     );
   }, [histories]);
   const respond = async (value: string) => {
-    const lower = value.toLowerCase();
-    const crisis = [
-      "suicide",
-      "kill myself",
-      "end my life",
-      "self harm",
-      "can't go on",
-      "cannot go on",
-    ].some((term) => lower.includes(term));
-    if (crisis) {
-      setUrgent(true);
-      return "I am concerned about your immediate safety. Please use the urgent support options shown now and contact a trusted person nearby.";
-    }
-    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
-    const token = window.sessionStorage.getItem("tranquiliva-id-token");
-    if (!apiBase || !token) throw new Error("AI support is not connected to your account.");
-    const response = await fetch(`${apiBase.replace(/\/$/, "")}/api/ai/chat`, {
+    if (/suicid|kill myself|end my life|self.harm|hurt myself/i.test(value)) setUrgent(true);
+    const token = await auth?.currentUser?.getIdToken();
+    if (!token) throw new Error("Please sign in again.");
+
+    const recent = [
+      ...messages.filter(m => m.text !== greeting),
+      { role: "user" as const, text: value }
+    ].slice(-11);
+
+    if (recent[0]?.role === "assistant") recent.shift();
+
+    const response = await fetch("/api/ai/chat", {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ message: value, language, journalContextAllowed: journalConsent }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ messages: recent })
     });
-    const data = await response.json();
-    if (!response.ok || !data?.message) throw new Error(data?.error || "AI support is unavailable right now.");
-    return String(data.message);
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok || typeof data.message !== "string")
+      throw new Error(data.error || "AI could not respond. Please try again.");
+
+    return data.message as string;
   };
   const send = async (e: FormEvent) => {
     e.preventDefault();
@@ -1581,11 +1578,12 @@ function Talk({ name, notify }: { name: string; notify: (m: string) => void }) {
     setMessages(next);
     setText("");
     setAiBusy(true);
+    setChatError("");
     try {
       const reply = await respond(value);
       setMessages([...next, { role: "assistant", text: reply }]);
     } catch (error) {
-      setMessages([...next, { role: "assistant", text: error instanceof Error ? error.message : "AI support is unavailable right now." }]);
+      setChatError(error instanceof Error ? error.message : "AI could not connect.");
     } finally {
       setAiBusy(false);
     }
@@ -1605,31 +1603,13 @@ function Talk({ name, notify }: { name: string; notify: (m: string) => void }) {
   };
   const newSession = () => {
     saveSession();
-    setMessages([{ role: "assistant", text: greeting }]);
+    setMessages([]);
     setUrgent(false);
-    setExercise(null);
+    setChatError("");
     notify("New conversation started.");
   };
-  const saveJournal = () => {
-    const insight = messages.filter((m) => m.role === "user").at(-1)?.text;
-    if (!insight) {
-      notify("Write something first.");
-      return;
-    }
-    const notes = JSON.parse(
-      window.localStorage.getItem("tranquiliva-journal-notes") || "[]",
-    );
-    window.localStorage.setItem(
-      "tranquiliva-journal-notes",
-      JSON.stringify([
-        { createdAt: new Date().toISOString(), text: insight },
-        ...notes,
-      ]),
-    );
-    notify("Saved to journal notes.");
-  };
   return (
-    <AppPage title="Tranquiliva AI">
+    <AppPage title="Talk">
       <section className="ai-boundary">
         <ShieldCheck />
         <p>
@@ -1638,7 +1618,7 @@ function Talk({ name, notify }: { name: string; notify: (m: string) => void }) {
         <button onClick={() => setPrivacyOpen(true)}>AI limits</button>
       </section>
       <div className="ai-layout">
-        <aside className="ai-history">
+        <aside className={`ai-history ${historyOpen ? "open" : ""}`}>
           <button className="new-ai" onClick={newSession}>
             <Plus />
             New conversation
@@ -1648,7 +1628,7 @@ function Talk({ name, notify }: { name: string; notify: (m: string) => void }) {
             histories.map((session) => (
               <button
                 key={session.id}
-                onClick={() => setMessages(session.messages)}
+                onClick={() => { setMessages(session.messages); setHistoryOpen(false); setChatError(""); }}
               >
                 <MessageCircle />
                 <div>
@@ -1679,13 +1659,18 @@ function Talk({ name, notify }: { name: string; notify: (m: string) => void }) {
         <main className="ai-chat">
           <header>
             <div>
+              <button type="button" className="ai-mobile-history"
+                aria-label="Conversations"
+                onClick={() => setHistoryOpen(!historyOpen)}>
+                <Menu />
+              </button>
               <Mark />
               <div>
                 <strong>Tranquiliva AI</strong>
                 <small>Private reflection</small>
               </div>
             </div>
-            <button onClick={newSession}>End session</button>
+            <button onClick={newSession}>New chat</button>
           </header>
           {urgent && (
             <section className="urgent-ai">
@@ -1700,54 +1685,36 @@ function Talk({ name, notify }: { name: string; notify: (m: string) => void }) {
             </section>
           )}
           <div className="ai-messages">
+            {!messages.length && (
+              <div className="ai-welcome">
+                <Sparkles />
+                <h2>What is on your mind?</h2>
+                <p>Start anywhere. This is your space to talk.</p>
+              </div>
+            )}
             {messages.map((message, i) => (
               <article key={i} className={message.role}>
-                <strong>
-                  {message.role === "assistant" ? "Tranquiliva AI" : "You"}
-                </strong>
+                <strong>{message.role === "assistant" ? "Tranquiliva AI" : "You"}</strong>
                 <p>{message.text}</p>
               </article>
             ))}
+            {aiBusy && <p className="ai-typing">Tranquiliva AI is thinking...</p>}
           </div>
-          {exercise && (
-            <section className="ai-exercise">
-              <button onClick={() => setExercise(null)}>
-                <X />
-              </button>
-              {exercise === "breathing" ? (
-                <>
-                  <div className="breath-orb" />
-                  <h2>60 second breathing</h2>
-                  <p>Inhale gently. Exhale slowly.</p>
-                </>
-              ) : (
-                <>
-                  <Compass />
-                  <h2>Five senses reset</h2>
-                  <p>
-                    Notice five things you see. Four you feel. Three you hear.
-                  </p>
-                </>
-              )}
-            </section>
-          )}
+          {chatError && <p className="ai-chat-error" role="alert">{chatError}</p>}
           <form className="ai-composer" onSubmit={send}>
             <textarea
               value={text}
               maxLength={3000}
               onChange={(e) => setText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+                  e.preventDefault();
+                  e.currentTarget.form?.requestSubmit();
+                }
+              }}
               placeholder="Message Tranquiliva AI"
             />
             <div>
-              <select
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-              >
-                <option>English</option>
-                <option>Twi</option>
-                <option>French</option>
-                <option>Spanish</option>
-              </select>
               <span>{text.length} / 3000</span>
               <button disabled={!text.trim() || aiBusy} aria-label="Send message">
                 {aiBusy ? <Clock3 /> : <Send />}
@@ -1756,47 +1723,9 @@ function Talk({ name, notify }: { name: string; notify: (m: string) => void }) {
           </form>
           <footer className="ai-disclaimer">
             <LockKeyhole />
-            Private to this device. AI can make mistakes.
+            AI can make mistakes. Not a therapist or emergency service. Messages are processed by an AI provider.
           </footer>
         </main>
-        <aside className="ai-tools">
-          <section>
-            <h2>Current session</h2>
-            <strong>Private reflection</strong>
-            <span>
-              Active
-            </span>
-          </section>
-          <section>
-            <h2>Try something now</h2>
-            <button onClick={() => setExercise("breathing")}>
-              <Leaf />
-              <strong>60 second breathing</strong>
-            </button>
-            <button onClick={() => setExercise("grounding")}>
-              <Compass />
-              <strong>Five senses reset</strong>
-            </button>
-            <button onClick={saveJournal}>
-              <PenLine />
-              <strong>Save a journal note</strong>
-            </button>
-          </section>
-          <section>
-            <h2>Your privacy</h2>
-            <label>
-              <input
-                type="checkbox"
-                checked={journalConsent}
-                onChange={() => setJournalConsent(!journalConsent)}
-              />
-              Allow journal context
-            </label>
-            <button onClick={() => setClearOpen(true)}>
-              Delete conversations
-            </button>
-          </section>
-        </aside>
       </div>
       <AlertDialog open={clearOpen} onOpenChange={setClearOpen}>
         <AlertDialogContent className="ai-alert">
@@ -1812,7 +1741,7 @@ function Talk({ name, notify }: { name: string; notify: (m: string) => void }) {
             <AlertDialogAction
               onClick={() => {
                 setHistories([]);
-                setMessages([{ role: "assistant", text: greeting }]);
+                setMessages([]);
                 setClearOpen(false);
                 notify("AI history deleted.");
               }}
@@ -1825,24 +1754,14 @@ function Talk({ name, notify }: { name: string; notify: (m: string) => void }) {
       <Dialog open={privacyOpen} onOpenChange={setPrivacyOpen}>
         <DialogContent className="community-dialog">
           <DialogHeader>
-            <DialogTitle>AI privacy</DialogTitle>
+            <DialogTitle>About Tranquiliva AI</DialogTitle>
             <DialogDescription>
-              Journal access is off unless you allow it. Conversations can be
-              deleted anytime.
+              Messages are processed by an external AI provider.
+              This chat does not use your journal entries.
+              It is not therapy or emergency care.
             </DialogDescription>
           </DialogHeader>
-          <label className="privacy-consent">
-            <input
-              type="checkbox"
-              checked={journalConsent}
-              onChange={() => setJournalConsent(!journalConsent)}
-            />
-            Allow journal context
-          </label>
-          <button
-            className="dialog-action"
-            onClick={() => setPrivacyOpen(false)}
-          >
+          <button className="dialog-action" onClick={() => setPrivacyOpen(false)}>
             Done
           </button>
         </DialogContent>
