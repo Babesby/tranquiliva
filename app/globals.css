@@ -8543,3 +8543,71 @@ body { font-size: 17px; }
 @media (prefers-reduced-motion: reduce) {
   .member-shell .ai-messages, .assessment-page { scroll-behavior: auto; }
 }
+
+
+/* Tranquiliva sculpture and default-dark visual update v2 */
+/* Logo: prominent without squeezing the navbar or mobile header. */
+.public-nav .logo .brand-logo-icon {
+  width: 52px; height: 52px; flex: 0 0 52px; border-radius: 14px;
+}
+.public-nav .logo strong { font-size: clamp(13px, 1.1vw, 17px); letter-spacing: .105em; }
+.auth-form-wrap > .logo .brand-logo-icon,
+.auth-art-overlay .logo .brand-logo-icon { width: 65px; height: 65px; flex: 0 0 65px; border-radius: 17px; }
+.member-logo .logo .brand-logo-icon { width: 56px; height: 56px; flex: 0 0 56px; border-radius: 14px; }
+.global-footer .footer-brand .logo .brand-logo-icon { width: 90px; height: 90px; flex: 0 0 90px; border-radius: 20px; }
+.global-footer .footer-brand .logo strong { font-size: clamp(15px, 1.45vw, 20px); }
+/* Sculptures: preserve the original content and layout hierarchy. */
+.public-page .hero-image-wrap { min-width: 0; overflow: hidden; }
+.public-page .hero-image-wrap > img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center; }
+.public-page .floating-checkin { padding: 14px 16px; }
+.public-page .floating-checkin > div { display: flex; align-items: center; justify-content: center; gap: 9px; }
+.public-page .care-showcase {
+  display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(250px, .98fr);
+  gap: clamp(18px, 3vw, 42px); padding: clamp(30px, 4.5vw, 64px);
+  align-items: center;
+}
+.public-page .care-showcase .care-copy { min-width: 0; }
+.public-page .care-showcase .care-visual { min-width: 0; display: flex; align-items: center; justify-content: center; }
+.public-page .care-showcase .care-visual img { width: min(100%, 430px); height: auto; display: block; object-fit: contain; }
+.public-page .care-showcase .care-access-grid {
+  grid-column: 1 / -1; min-width: 0; display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;
+}
+.public-page .care-showcase .care-access-grid > span {
+  min-width: 0; display: flex; align-items: center; justify-content: center;
+  gap: 10px; padding: clamp(12px, 2vw, 20px);
+}
+.public-page .final-cta {
+  display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  gap: clamp(20px, 5vw, 72px); padding: clamp(30px, 4.5vw, 62px);
+  align-items: center; text-align: left;
+}
+.public-page .final-cta .final-cta-art {
+  width: min(100%, 440px); max-height: 380px; height: auto; object-fit: contain;
+  display: block; justify-self: center;
+}
+.public-page .final-cta h2 { margin: 0; font-size: clamp(39px, 5vw, 68px); line-height: 1.05; }
+/* Dark surfaces support brand artwork without adding cards. */
+:root[data-theme="dark"] .public-page .care-showcase .care-access-grid > span { color: #102b31; }
+@media (max-width: 950px) {
+  .public-page .care-showcase { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .public-page .care-showcase .care-copy { text-align: center; }
+  .public-page .final-cta { grid-template-columns: 1fr; text-align: center; }
+}
+@media (max-width: 760px) {
+  .public-nav .logo .brand-logo-icon { width: 42px; height: 42px; flex-basis: 42px; border-radius: 11px; }
+  .auth-form-wrap > .logo .brand-logo-icon,
+  .auth-art-overlay .logo .brand-logo-icon { width: 58px; height: 58px; flex-basis: 58px; }
+  .global-footer .footer-brand .logo .brand-logo-icon { width: 76px; height: 76px; flex-basis: 76px; }
+  .public-page .hero-image-wrap > img { object-position: center; }
+  .public-page .care-showcase { padding: 28px 20px; }
+  .public-page .care-showcase .care-visual img { max-height: 340px; }
+  .public-page .care-showcase .care-access-grid { grid-template-columns: 1fr; gap: 9px; }
+  .public-page .final-cta { padding: 30px 22px; gap: 12px; }
+  .public-page .final-cta .final-cta-art { max-height: 300px; }
+  .public-page .final-cta h2 { font-size: clamp(36px, 9vw, 49px); }
+}
+@media (max-width: 390px) {
+  .public-nav .logo .brand-logo-icon { width: 38px; height: 38px; flex-basis: 38px; }
+  .public-nav .logo strong { font-size: 12px; letter-spacing: .065em; }
+}

@@ -171,7 +171,13 @@ export default function Tranquiliva() {
   const [screen, setScreen] = useState<Screen>("public");
   const [authReady, setAuthReady] = useState(!firebaseConfigured);
   const hadAuthenticatedUser = useRef(false);
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
+  const setDarkPreference = (next: boolean) => {
+    setDark(next);
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("tranquiliva-theme", next ? "dark" : "light");
+    }
+  };
   const [profile, setProfileState] = useState(() => {
     if (typeof window === "undefined") return { name: "Member", goals: [] as string[] };
     try {
@@ -189,6 +195,10 @@ export default function Tranquiliva() {
     }
   };
 
+  useEffect(() => {
+    const preference = window.localStorage.getItem("tranquiliva-theme");
+    if (preference === "light") setDark(false);
+  }, []);
   useEffect(() => {
     document.documentElement.dataset.theme = dark ? "dark" : "light";
   }, [dark]);
@@ -252,7 +262,7 @@ export default function Tranquiliva() {
       {!authReady && <div className="auth-loading" aria-label="Loading your private space"><Mark /></div>}
       {authReady && <>
       {screen === "public" && (
-        <PublicHome go={go} dark={dark} setDark={setDark} />
+        <PublicHome go={go} dark={dark} setDark={setDarkPreference} />
       )}
       {screen === "auth" && (
         <Auth
@@ -268,10 +278,10 @@ export default function Tranquiliva() {
       )}
       {screen === "assessment" && <Assessment go={go} />}
       {screen === "app" && (
-        <MemberApp go={go} dark={dark} setDark={setDark} profile={profile} />
+        <MemberApp go={go} dark={dark} setDark={setDarkPreference} profile={profile} />
       )}
       {screen === "therapist-app" && (
-        <TherapistApp go={go} dark={dark} setDark={setDark} name={profile.name} />
+        <TherapistApp go={go} dark={dark} setDark={setDarkPreference} name={profile.name} />
       )}
       </>}
     </div>
@@ -397,11 +407,10 @@ function PublicHome({
           </div>
           <div className="hero-image-wrap">
             <img
-            src="/hero-tranquiliva.webp"
-              alt="A woman enjoying a quiet moment beside a window"
+            src="/hero-sculptures/quiet-landing.webp"
+              alt="Quiet Landing: two relaxed figures resting within an aqua sculpture"
             />
             <div className="floating-checkin">
-              <strong>What do you need?</strong>
               <div>
                 <button type="button" aria-label="Explore Practise" onClick={() => openFeature("resources")}>
                   <Leaf />
@@ -446,6 +455,11 @@ function PublicHome({
           <div className="care-copy">
             <h2>Find verified care.</h2>
           </div>
+          <div className="care-visual">
+            <img src="/hero-sculptures/gentle-unfolding.webp"
+              alt="Gentle Unfolding: a calming sculpture of two people seated on a flowing ribbon"
+              loading="lazy" decoding="async" />
+          </div>
           <div className="care-access-grid">
             <span><ShieldCheck /><strong>Verified professionals</strong></span>
             <span><CalendarDays /><strong>Private requests</strong></span>
@@ -454,7 +468,10 @@ function PublicHome({
         </section>
 
         <section className="final-cta">
-          <Mark light />
+          <img className="final-cta-art"
+            src="/hero-sculptures/room-to-breathe.webp"
+            alt="Room to Breathe: calm figures in a spacious sculptural arch"
+            loading="lazy" decoding="async" />
           <h2>Take one quiet minute.</h2>
 
         </section>
@@ -613,8 +630,8 @@ function Auth({
       </button>
       <div className="auth-art">
         <img
-          src="/auth-tranquiliva.webp"
-          alt="A private journal in a calm interior"
+          src="/hero-sculptures/held-in-stillness.webp"
+          alt="Held in Stillness: a welcoming sculptural portrait of two relaxed people"
         />
         <div className="auth-art-overlay">
           <Logo light />
