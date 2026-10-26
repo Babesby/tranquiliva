@@ -9295,3 +9295,18 @@ body { font-size: 17px; }
     min-height: 46px;
   }
 }
+
+
+/* Center daily mood labels */
+.member-shell .mood-choice-grid button {
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.member-shell .mood-choice-grid button strong {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  line-height: 1.4;
+}
